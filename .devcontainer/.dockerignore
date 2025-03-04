@@ -1,0 +1,23 @@
+# Ignorar dependencias para evitar conflictos y copias innecesarias
+node_modules
+**/node_modules
+yarn.lock
+package-lock.json
+
+# Archivos de configuración de Dev Containers y Docker
+.devcontainer/
+.dockerignore
+docker-compose.yml
+Dockerfile
+
+# Archivos del sistema y configuración de IDEs
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db
+
+# Ignorar Git y archivos temporales
+.git/
+.gitignore
+*.swp

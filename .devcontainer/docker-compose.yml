@@ -1,21 +1,46 @@
-version: "3.8"
+version: '3.8'
+
 services:
-  
   app:
-    image: mcr.microsoft.com/devcontainers/base:bullseye
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: backstage_app
     volumes:
-      - ../..:/workspaces:cached
-    command: sleep infinity
-    networks:
-    - backstage
-  db:    
-    image:  postgres
+      - .:/workspaces/${LOCAL_WORKSPACE_FOLDER_BASENAME}
     environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: example
+    ports:
+      - "3000:3000"
+      - "7007:7007"
+      - "8080:8080"
     networks:
       - backstage
+    privileged: true
+    tty: true
+    stdin_open: true
+
+  db:
+    image: postgres:13
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
     ports:
-      - 5432:5432
-      
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backstage
+
 networks:
   backstage:
+    driver: bridge
+
+volumes:
+  postgres_data:
+
